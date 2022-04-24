@@ -11,10 +11,12 @@ module.exports = app => {
 
 
   router.post('/api/login', controller.api.login);
+  router.post('/api/logout', controller.api.logout);
   router.post('/api/reg', controller.api.reg);
   router.get('/api/isLogin', controller.api.isLogin);
   router.get('/api/getInfo', controller.api.getInfo);
   router.post('/api/setInfo', controller.api.setInfo);
+  router.post('/api/addUser', controller.api.addUser);
   router.post('/api/daka', controller.api.daka);
   router.post('/api/dakaList', controller.api.dakaList);
   router.post('/api/yudin', controller.api.yudin);
@@ -24,5 +26,7 @@ module.exports = app => {
   router.post('/api/delUser', controller.api.delUser);
   router.post('/api/gonggao', controller.api.gonggao);
   router.post('/api/gonggaoList', controller.api.gonggaoList);
+  router.post('/api/delGonggao', controller.api.delGonggao);
+  router.post('/api/editGonggao', controller.api.editGonggao);
 
 };

@@ -13,7 +13,7 @@ class HomeController extends Controller {
   async login() {
 
     const { ctx } = this;
-    const user = await this.ctx.model.User.findOne({username: ctx.request.body.username})
+    const user = await this.ctx.model.User.findOne({username: ctx.request.body.username, isCheck: true})
     if (user && user.password === ctx.request.body.password) {
       ctx.cookies.set('user', user.username)
       ctx.body = {
@@ -23,15 +23,28 @@ class HomeController extends Controller {
     } else {
       ctx.body = {
         code: -1,
-        msg: "账号或密码错误"
+        msg: "账号或密码错误或未审核"
       }
     }
 
+  }
+  async logout() {
+    const { ctx } = this;
+    ctx.cookies.set('user', '')
+    ctx.body = {
+      code: 0,
+    }
   }
   async isLogin() {
 
     const { ctx } = this;
     const username = ctx.cookies.get('user')
+    if (!username) {
+      ctx.body = {
+        code: 1,
+        msg: "未登录"
+      }
+    }
     const user = await this.ctx.model.User.findOne({username})
     if (user && user.username) {
       ctx.body = {
@@ -87,6 +100,19 @@ class HomeController extends Controller {
 
     let data = await this.ctx.model.User.updateOne({username}, result);
     // data.save();
+    result.isCheck && this.ctx.service.tool.sendMail(username, '你的账号已审核通过', '账号：' + username)
+
+    ctx.body = {
+      code: 0
+    }
+  }
+  async addUser() {
+
+    const { ctx } = this;
+    let result = this.ctx.request.body;
+
+    let data = await this.ctx.model.User.create(result);
+    // data.save();
     ctx.body = {
       code: 0
     }
@@ -139,7 +165,7 @@ class HomeController extends Controller {
     const username = ctx.cookies.get('user')
     let user = await this.ctx.model.User.findOne({username});
     if (user && user.isAdmin) {
-      let users = await this.ctx.model.User.find();
+      let users = await this.ctx.model.User.find(ctx.request.body);
       ctx.body = {
         code: 0,
         value:users
@@ -179,6 +205,26 @@ class HomeController extends Controller {
     const { ctx } = this;
     const username = ctx.cookies.get('user')
     let data = await this.ctx.model.Gonggao.create({...ctx.request.body, username});
+    ctx.body = {
+      code: 0
+    }
+
+  }
+  async delGonggao() {
+
+    const { ctx } = this;
+    const username = ctx.cookies.get('user')
+    let data = await this.ctx.model.Gonggao.deleteOne({_id: ctx.request.body._id});
+    ctx.body = {
+      code: 0
+    }
+
+  }
+  async editGonggao() {
+
+    const { ctx } = this;
+    const username = ctx.cookies.get('user')
+    let data = await this.ctx.model.Gonggao.updateOne({_id: ctx.request.body._id}, ctx.request.body);
     ctx.body = {
       code: 0
     }

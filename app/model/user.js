@@ -34,6 +34,10 @@ module.exports = app => {
             type: Boolean,
             default: false
         },
+        isCheck: {
+            type: Boolean,
+            default: false
+        },
 
     });
     return mongoose.model('User', UserSchema, 'user');
