@@ -14,7 +14,8 @@ class HomeController extends Controller {
 
     const { ctx } = this;
     const user = await this.ctx.model.User.findOne({username: ctx.request.body.username, isCheck: true})
-    if (user && user.password === ctx.request.body.password) {
+    const isVaild = await this.ctx.model.Config.findOne()
+    if (isVaild && user && user.password === ctx.request.body.password) {
       ctx.cookies.set('user', user.username)
       ctx.body = {
         code: 0,
