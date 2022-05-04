@@ -8,7 +8,7 @@ module.exports = app => {
         },
         time: {
             type: Number,
-            default: Date.now()
+            default: () => Date.now()
         }
 
     });
