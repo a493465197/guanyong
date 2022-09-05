@@ -51,7 +51,7 @@ module.exports = appInfo => {
   // }
   config.mongoose = {
     client:{
-    url:'mongodb://3607h09y06.qicp.vip:8917/yuangong',
+    url:'mongodb://root:yuangongzraipi@3607h09y06.qicp.vip:8917/yuangong',
     options:{}
     }
   }
